@@ -35,13 +35,13 @@ import com.beust.jcommander.ParameterException;
 public class Driver {
 
   private static class Opts {
-    @Parameter(names = {"-c", "--category"}, description = "Category of the review data")
+    @Parameter(names = {"-c", "--category"}, description = "Category of the review data", required = true)
     private String category;
 
-    @Parameter(names = {"-f", "--file"}, description = "File to read")
+    @Parameter(names = {"-f", "--file"}, description = "File to read", required = true)
     private File file;
 
-    @Parameter(names = {"-of", "--output-file"}, description = "File to write to")
+    @Parameter(names = {"-of", "--output-file"}, description = "File to write to", required = true)
     private File outputFile;
   }
 
@@ -58,10 +58,6 @@ public class Driver {
       System.err.println(ex.getMessage());
       System.exit(1);
     }
-
-    checkNotNull(options.file);
-    checkNotNull(options.outputFile);
-    checkNotNull(options.category);
 
     try (BufferedReader reader = new BufferedReader(new FileReader(options.file));
         FileWriter writer = new FileWriter(options.outputFile)) {
