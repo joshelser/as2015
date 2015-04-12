@@ -63,9 +63,24 @@ public class Driver {
         FileWriter writer = new FileWriter(options.outputFile)) {
       AmazonReviewParser parser = new AmazonReviewParser(reader);
 
+      long recordsParsed = 0l;
       while (parser.hasNext()) {
         AmazonReview review = parser.next();
         review.addReviewField(new AmazonReviewField("category", ""), ByteBuffer.wrap(options.category.getBytes(StandardCharsets.UTF_8)));
+
+        if (0 == recordsParsed) {
+          StringBuilder header = new StringBuilder(32);
+          for(AmazonReviewField field : review.getAttributes().keySet()) {
+            if (0 != header.length()) {
+              header.append(",");
+            }
+            header.append(field.getCategory()).append(":").append(field.getName());
+          }
+          writer.write(header.toString());
+          writer.write("\n");
+        }
+
+        recordsParsed++;
 
         writer.write(review.toCsv());
         writer.write("\n");
