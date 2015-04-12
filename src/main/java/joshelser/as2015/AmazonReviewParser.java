@@ -35,6 +35,7 @@ public class AmazonReviewParser implements Iterator<AmazonReview> {
   
   public AmazonReviewParser(BufferedReader reader) {
     this.reader = reader;
+    currentReview = getNextReview();
   }
   
   @Override

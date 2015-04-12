@@ -16,6 +16,8 @@
  */
 package joshelser.as2015;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -56,6 +58,10 @@ public class Driver {
       System.err.println(ex.getMessage());
       System.exit(1);
     }
+
+    checkNotNull(options.file);
+    checkNotNull(options.outputFile);
+    checkNotNull(options.category);
 
     try (BufferedReader reader = new BufferedReader(new FileReader(options.file));
         FileWriter writer = new FileWriter(options.outputFile)) {
