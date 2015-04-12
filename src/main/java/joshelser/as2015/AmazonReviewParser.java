@@ -97,7 +97,7 @@ public class AmazonReviewParser implements Iterator<AmazonReview> {
           if (-1 == index) {
             throw new IllegalArgumentException("Cannot parse key '" + key + "'");
           }
-          AmazonReviewField field = new AmazonReviewField(key.substring(0, index), key.substring(index));
+          AmazonReviewField field = new AmazonReviewField(key.substring(0, index), key.substring(index + 1));
           nextReview.addReviewField(field, ByteBuffer.wrap(value.getBytes(StandardCharsets.UTF_8)));
         }
       } while (!readerExhausted);
