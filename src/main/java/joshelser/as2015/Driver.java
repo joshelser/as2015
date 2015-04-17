@@ -16,14 +16,16 @@
  */
 package joshelser.as2015;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
+import java.util.Set;
+
+import au.com.bytecode.opencsv.CSVWriter;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -60,7 +62,7 @@ public class Driver {
     }
 
     try (BufferedReader reader = new BufferedReader(new FileReader(options.file));
-        FileWriter writer = new FileWriter(options.outputFile)) {
+        CSVWriter writer = new CSVWriter(new FileWriter(options.outputFile), ',')) {
       AmazonReviewParser parser = new AmazonReviewParser(reader);
 
       long recordsParsed = 0l;
@@ -69,21 +71,19 @@ public class Driver {
         review.addReviewField(new AmazonReviewField("category", ""), ByteBuffer.wrap(options.category.getBytes(StandardCharsets.UTF_8)));
 
         if (0 == recordsParsed) {
-          StringBuilder header = new StringBuilder(32);
-          for(AmazonReviewField field : review.getAttributes().keySet()) {
-            if (0 != header.length()) {
-              header.append(",");
-            }
-            header.append(field.getCategory()).append(":").append(field.getName());
+          Set<AmazonReviewField> keys = review.getAttributes().keySet();
+          String[] header = new String[keys.size()];
+          Iterator<AmazonReviewField> iter = keys.iterator();
+          for (int i = 0; i < header.length; i++) {
+            AmazonReviewField field = iter.next();
+            header[i] = field.getCategory() + ":" + field.getName();
           }
-          writer.write(header.toString());
-          writer.write("\n");
+          writer.writeNext(header);
         }
 
         recordsParsed++;
 
-        writer.write(review.toCsv());
-        writer.write("\n");
+        writer.writeNext(review.toArray());
       }
     }
   }

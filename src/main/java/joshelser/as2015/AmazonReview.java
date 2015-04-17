@@ -20,6 +20,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.nio.ByteBuffer;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -44,14 +45,13 @@ public class AmazonReview {
     return Collections.unmodifiableMap(reviewData);
   }
 
-  public String toCsv() {
-    StringBuilder sb = new StringBuilder(64);
-    for (ByteBuffer value : reviewData.values()) {
-      if (0 != sb.length()) {
-        sb.append(",");
-      }
-      sb.append(new String(value.array(), value.arrayOffset(), value.limit()));
+  public String[] toArray() {
+    String[] values = new String[reviewData.values().size()];
+    Iterator<ByteBuffer> iter = reviewData.values().iterator();
+    for (int i = 0; i < values.length; i++) {
+      ByteBuffer value = iter.next();
+      values[i] = new String(value.array(), value.arrayOffset(), value.limit());
     }
-    return sb.toString();
+    return values;
   }
 }
