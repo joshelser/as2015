@@ -62,7 +62,7 @@ public class Driver {
     }
 
     try (BufferedReader reader = new BufferedReader(new FileReader(options.file));
-        CSVWriter writer = new CSVWriter(new FileWriter(options.outputFile), ',')) {
+        CSVWriter writer = new CSVWriter(new FileWriter(options.outputFile), (char) 1)) {
       AmazonReviewParser parser = new AmazonReviewParser(reader);
 
       long recordsParsed = 0l;
