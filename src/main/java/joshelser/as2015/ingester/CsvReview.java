@@ -14,50 +14,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package joshelser.as2015;
+package joshelser.as2015.ingester;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Collections;
+import java.util.List;
+
 /**
- * Identifies a field in an Amazon review 
+ * 
  */
-public class AmazonReviewField implements Comparable<AmazonReviewField> {
+public class CsvReview {
 
-  private final String category;
-  private final String name;
+  private List<String> header;
+  private List<String> values;
 
-  public AmazonReviewField(String category, String name) {
-    checkNotNull(category);
-    checkNotNull(name);
-    this.category = category;
-    this.name = name;
+  public CsvReview(List<String> header, List<String> values) {
+    checkNotNull(header);
+    checkNotNull(values);
+    this.header = header;
+    this.values = values;
   }
 
-  /**
-   * @return the category
-   */
-  public String getCategory() {
-    return category;
+  public List<String> getHeader() {
+    return Collections.unmodifiableList(header);
   }
 
-  /**
-   * @return the name
-   */
-  public String getName() {
-    return name;
-  }
-
-  @Override
-  public String toString() {
-    return "AmazonReviewField [category=" + category + ", name=" + name + "]";
+  public List<String> getValues() {
+    return Collections.unmodifiableList(values);
   }
 
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((category == null) ? 0 : category.hashCode());
-    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + ((header == null) ? 0 : header.hashCode());
+    result = prime * result + ((values == null) ? 0 : values.hashCode());
     return result;
   }
 
@@ -66,26 +58,16 @@ public class AmazonReviewField implements Comparable<AmazonReviewField> {
     if (this == obj) {
       return true;
     }
-    if (!(obj instanceof AmazonReviewField)) {
+    if (!(obj instanceof CsvReview)) {
       return false;
     }
-
-    AmazonReviewField other = (AmazonReviewField) obj;
-    if (!category.equals(other.category)) {
+    CsvReview other = (CsvReview) obj;
+    if (!header.equals(other.header)) {
       return false;
     }
-    if (!name.equals(other.name)) {
+    if (!values.equals(other.values)) {
       return false;
     }
     return true;
-  }
-
-  @Override
-  public int compareTo(AmazonReviewField other) {
-    int res = category.compareTo(other.category);
-    if (0 != res) {
-      return res;
-    }
-    return name.compareTo(other.name);
   }
 }

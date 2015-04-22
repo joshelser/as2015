@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package joshelser.as2015;
+package joshelser.as2015.parser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
